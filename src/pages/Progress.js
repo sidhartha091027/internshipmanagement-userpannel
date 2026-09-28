@@ -1,0 +1,7 @@
+import { useEffect, useState } from 'react';
+import { getApplications } from '../services/applicationService';
+import { useAuth } from '../context/AuthContext';
+
+function Progress() { const { user } = useAuth(); const [applications, setApplications] = useState([]); useEffect(() => { getApplications(user.uid).then(setApplications); }, [user.uid]); const stages = ['Submitted', 'Under review', 'Interview', 'Selected']; return <div><h1 className="text-3xl font-bold">Selection progress</h1><p className="mt-2 text-slate-600">Follow each application from submission to selection.</p>{applications.length ? <div className="mt-8 space-y-6">{applications.map((item) => { const active = stages.indexOf(item.status); return <section key={item.id} className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200"><h2 className="font-bold">{item.title}</h2><div className="mt-6 grid grid-cols-4 gap-2">{stages.map((stage, index) => <div key={stage}><div className={`h-2 rounded-full ${index <= active ? 'bg-blue-600' : 'bg-slate-200'}`} /><p className={`mt-2 text-xs ${index <= active ? 'font-semibold text-blue-700' : 'text-slate-500'}`}>{stage}</p></div>)}</div></section>; })}</div> : <div className="mt-8 rounded-2xl bg-white p-8 text-slate-600 ring-1 ring-slate-200">Your progress timeline will appear after your first application.</div>}</div>; }
+
+export default Progress;

@@ -1,0 +1,8 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getApplications } from '../services/applicationService';
+import { useAuth } from '../context/AuthContext';
+
+function Applications() { const { user } = useAuth(); const [items, setItems] = useState([]); useEffect(() => { getApplications(user.uid).then(setItems); }, [user.uid]); return <div><h1 className="text-3xl font-bold">My applications</h1><p className="mt-2 text-slate-600">Keep track of every opportunity in one place.</p>{items.length ? <div className="mt-8 space-y-4">{items.map((item) => <div key={item.id} className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200"><div className="flex flex-col justify-between gap-3 sm:flex-row"><div><h2 className="font-bold">{item.title}</h2><p className="mt-1 text-sm text-slate-500">{item.company}</p></div><span className="h-fit rounded-full bg-blue-50 px-3 py-1 text-sm font-semibold text-blue-700">{item.status}</span></div><p className="mt-4 text-sm text-slate-500">Applied {new Date(item.appliedAt).toLocaleDateString()}</p></div>)}</div> : <div className="mt-8 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center"><p className="font-semibold">No applications yet</p><p className="mt-2 text-sm text-slate-600">Find a role that fits your goals and submit your first application.</p><Link to="/internships" className="mt-5 inline-block rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white">Browse internships</Link></div>}</div>; }
+
+export default Applications;
